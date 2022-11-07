@@ -1,0 +1,122 @@
+import pandas as pd 
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+# transform data
+df = scaler.fit_transform(df)
+print(df )
+
+
+import random
+a = random.randint(0,302)
+b = random.randint(0,302)
+c = random.randint(0,302)
+print(a)
+print(b)
+print(c)
+
+C=[]
+C1=[]
+C2=[]
+C3=[]
+C.append(C1)
+C.append(C2)
+C.append(C3)
+
+C 
+
+
+C1.append(df['age'][a])
+C1.append(df['trestbps'][a])
+C2.append(df['age'][b])
+C2.append(df['trestbps'][b])
+C3.append(df['age'][c])
+C3.append(df['trestbps'][c])
+
+
+C = [[45, 138.0], [63, 130.0], [39, 94.0]]
+
+print(C)
+
+C[0] = [round(items, 2) for items in C[0]]
+C[1] = [round(items, 2) for items in C[1]]
+C[2] = [round(items, 2) for items in C[2]]
+
+print(C)
+
+import matplotlib.pyplot as plt
+plt.scatter(df['age'],df['trestbps'])
+
+
+cluster_1 = []
+cluster_2 = []
+cluster_3 = []
+
+def average(cluster):
+  sum_x = 0
+  sum_y = 0
+  for i in range(0,len(cluster)):
+    sum_x += cluster[i][0]
+    sum_y += cluster[i][1]
+  return round(sum_x/len(cluster),2),round(sum_y/len(cluster),2)
+
+
+new_C =[[0,0],[0,0],[0,0]]
+
+while C!=new_C:
+  cluster_1 = []
+  cluster_2 = []
+  cluster_3 = []
+  for i in range(0,len(df)):
+    min_a=math.sqrt( ((df['age'][i]-C[0][0])**2)+((df['trestbps'][i]-C[0][1])**2))
+    min_b=math.sqrt( ((df['age'][i]-C[1][0])**2)+((df['trestbps'][i]-C[1][1])**2))
+    min_c=math.sqrt( ((df['age'][i]-C[2][0])**2)+((df['trestbps'][i]-C[2][1])**2))
+    if ((min_a < min_b )and (min_a< min_c)):
+      cluster_1.append([df['age'][i],df['trestbps'][i]])
+    elif ((min_b < min_a) and (min_b < min_c)):
+      cluster_2.append([df['age'][i],df['trestbps'][i]])
+    else:
+      cluster_3.append([df['age'][i],df['trestbps'][i]])
+
+    
+  new_C[0][0],new_C[0][1] = average(cluster_1)
+  new_C[1][0],new_C[1][1] = average(cluster_2)
+  new_C[2][0],new_C[2][1] = average(cluster_3) 
+  if new_C!=C:
+    C[0][0],C[0][1] = average(cluster_1)
+    C[1][0],C[1][1] = average(cluster_2)
+    C[2][0],C[2][1] = average(cluster_3)
+  else:
+    break
+
+
+print("The final centroids of 3 clusters are :",C)
+
+print("The final three clusters are :")
+print("Cluster 1:",cluster_1)
+print("Cluster 2:",cluster_2)
+print("Cluster 3:",cluster_3)
+
+x_1=[]
+y_1=[]
+x_2=[]
+y_2=[]
+x_3=[]
+y_3=[]
+for i in range(0,len(cluster_1)):
+  x_1.append(cluster_1[i][0])
+  y_1.append(cluster_1[i][1])
+for i in range(0,len(cluster_2)):
+  x_2.append(cluster_2[i][0])
+  y_2.append(cluster_2[i][1])
+for i in range(0,len(cluster_3)):
+  x_3.append(cluster_3[i][0])
+  y_3.append(cluster_3[i][1])
+
+
+plt.scatter(x_1, y_1, c='green')
+plt.scatter(x_2, y_2, c='red')
+plt.scatter(x_3, y_3, c='blue')
