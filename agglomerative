@@ -1,0 +1,44 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from scipy.cluster.hierarchy import dendrogram, linkage
+import scipy.cluster.hierarchy as shc
+from sklearn.cluster import AgglomerativeClustering
+
+df = pd.read_csv('/content/Mall_Customers.csv')
+
+print(df)
+
+df = df[['Age','Annual Income (k$)']]
+
+print(df)
+
+print(len(df))
+
+from sklearn.preprocessing import MinMaxScaler
+scaler= MinMaxScaler()
+df = scaler.fit_transform(df)
+print(df)
+
+type(df)
+
+import scipy.cluster.hierarchy as sch 
+dendro = sch.dendrogram(sch.linkage(df, method = 'ward')) 
+plt.title('Dendrogram') 
+plt.xlabel('Age') 
+plt.ylabel('Annual Income (k$)')
+plt.show()
+
+from sklearn.cluster import AgglomerativeClustering 
+hc = AgglomerativeClustering(n_clusters = 5, affinity = 'euclidean', linkage = 'ward') 
+y_hc = hc.fit_predict(df)
+
+
+print(hc)
+
+plt.scatter(df[y_hc==0, 0], df[y_hc==0, 1], c='red')
+plt.scatter(df[y_hc==1, 0], df[y_hc==1, 1], c='blue')
+plt.scatter(df[y_hc==2, 0], df[y_hc==2, 1],  c='green')
+plt.scatter(df[y_hc==3, 0], df[y_hc==3, 1],  c='cyan')
+plt.scatter(df[y_hc==4, 0], df[y_hc==4, 1],  c='magenta')
